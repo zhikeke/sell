@@ -1,4 +1,4 @@
-package com.ke.sell.dto;
+package com.ke.sell.param;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
-public class ProductCategoryDTO {
+public class ProductCategoryParam {
 
     private Integer categoryId;
 

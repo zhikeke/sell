@@ -1,8 +1,6 @@
 package com.ke.sell.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,6 +8,9 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDetail {
     /** 订单详情Id. */
     private String detailId;

@@ -2,7 +2,8 @@ package com.ke.sell.service.impl;
 
 import com.google.common.base.Preconditions;
 import com.ke.sell.dao.ProductInfoMapper;
-import com.ke.sell.dto.ProductInfoDTO;
+import com.ke.sell.dto.CartDTO;
+import com.ke.sell.param.ProductInfoParam;
 import com.ke.sell.enums.ProductStatusEnum;
 import com.ke.sell.exception.ParamException;
 import com.ke.sell.model.ProductCategory;
@@ -12,12 +13,11 @@ import com.ke.sell.service.ProductService;
 import com.ke.sell.util.BeanVaildator;
 import com.ke.sell.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class ProudctServiceImpl implements ProductService {
 
     @Override
     public List<ProductInfo> findUpAll() {
-         return productInfoMapper.findUpAll(ProductStatusEnum.DOWN.getCode());
+         return productInfoMapper.findUpAll(ProductStatusEnum.UP.getCode());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ProudctServiceImpl implements ProductService {
     }
 
     @Override
-    public void save(ProductInfoDTO param) {
+    public void save(ProductInfoParam param) {
         BeanVaildator.check(param);
         if (checkExistByProductIdAndId(param.getProductId(), param.getId())) {
             log.info("商品Id已存在!!!, param:{}", JsonMapper.obj2String(param));
@@ -80,7 +80,7 @@ public class ProudctServiceImpl implements ProductService {
     }
 
     @Override
-    public void update(ProductInfoDTO param) {
+    public void update(ProductInfoParam param) {
         BeanVaildator.check(param);
         ProductInfo beforeProduct = productInfoMapper.selectByPrimaryKey(param.getProductId());
 
@@ -117,6 +117,37 @@ public class ProudctServiceImpl implements ProductService {
             throw new ParamException("商品Id为空!!!");
         }
         productInfoMapper.deleteByPrimaryKey(productId);
+    }
+
+    @Override
+    @Transactional
+    public void decreaseStock(List<CartDTO> cartDTOList) {
+        for (CartDTO cartDTO : cartDTOList) {
+            ProductInfo productInfo = productInfoMapper.selectByPrimaryKey(cartDTO.getProductId());
+            Preconditions.checkNotNull(productInfo, "商品不存在!!!");
+
+            Integer res = productInfo.getProductStock() - cartDTO.getProductQuantity();
+            if (res < 0) {
+                log.info("【减少库存】 商品库存不足!!! param:{}", JsonMapper.obj2String(cartDTO));
+                throw new ParamException("【减少库存】 商品库存不足!!!");
+            }
+            productInfo.setProductStock(res);
+            productInfoMapper.updateByPrimaryKeySelective(productInfo);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void increaseStock(List<CartDTO> cartDTOList) {
+        for (CartDTO cartDTO : cartDTOList) {
+            ProductInfo productInfo = productInfoMapper.selectByPrimaryKey(cartDTO.getProductId());
+            Preconditions.checkNotNull(productInfo, "商品不存在!!!");
+
+            Integer res = productInfo.getProductStock() + cartDTO.getProductQuantity();
+
+            productInfo.setProductStock(res);
+            productInfoMapper.updateByPrimaryKeySelective(productInfo);
+        }
     }
 
     private boolean checkExistByProductIdAndId(String productId, Integer id) {

@@ -1,6 +1,6 @@
 package com.ke.sell.service;
 
-import com.ke.sell.dto.ProductCategoryDTO;
+import com.ke.sell.param.ProductCategoryParam;
 import com.ke.sell.model.ProductCategory;
 
 import java.util.List;
@@ -40,17 +40,17 @@ public interface CategoryService {
 
     /**
      * 添加新类目
-     * @param productCategoryDTO
+     * @param productCategoryParam
      * @return
      */
-    void save(ProductCategoryDTO productCategoryDTO);
+    void save(ProductCategoryParam productCategoryParam);
 
     /**
      * 修改类目
-     * @param productCategoryDTO
+     * @param productCategoryParam
      * @return
      */
-    void update(ProductCategoryDTO productCategoryDTO);
+    void update(ProductCategoryParam productCategoryParam);
 
     /**
      * 删除类目

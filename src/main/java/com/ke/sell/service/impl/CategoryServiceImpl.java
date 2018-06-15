@@ -1,9 +1,9 @@
 package com.ke.sell.service.impl;
 
 import com.google.common.base.Preconditions;
-import com.ke.sell.dao.OrderDetailMapper;
+import com.google.common.collect.Lists;
 import com.ke.sell.dao.ProductCategoryMapper;
-import com.ke.sell.dto.ProductCategoryDTO;
+import com.ke.sell.param.ProductCategoryParam;
 import com.ke.sell.exception.ParamException;
 import com.ke.sell.model.ProductCategory;
 import com.ke.sell.service.CategoryService;
@@ -54,13 +54,13 @@ public class CategoryServiceImpl implements CategoryService {
     public List<ProductCategory> findByCategoryTypes(List<Integer> categoryTypeList) {
         if (CollectionUtils.isEmpty(categoryTypeList)) {
             log.error("类目编号为空!!!");
-            throw new ParamException("类目编号为空!!!");
+            return Lists.newArrayList();
         }
         return productCategoryMapper.findByCategoryTypes(categoryTypeList);
     }
 
     @Override
-    public void save(ProductCategoryDTO param) {
+    public void save(ProductCategoryParam param) {
         BeanVaildator.check(param);
         if (checkExistByCategoryNameAndId(param.getCategoryName(), param.getCategoryId())) {
             log.info("该类别已存在!!!, param:{}", JsonMapper.obj2String(param));
@@ -81,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void update(ProductCategoryDTO param) {
+    public void update(ProductCategoryParam param) {
         BeanVaildator.check(param);
 
         ProductCategory beforeOroductCategory = productCategoryMapper.selectByPrimaryKey(param.getCategoryId());

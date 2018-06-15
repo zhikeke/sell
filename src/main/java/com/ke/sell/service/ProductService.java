@@ -1,6 +1,7 @@
 package com.ke.sell.service;
 
-import com.ke.sell.dto.ProductInfoDTO;
+import com.ke.sell.dto.CartDTO;
+import com.ke.sell.param.ProductInfoParam;
 import com.ke.sell.model.ProductInfo;
 
 import java.util.List;
@@ -33,17 +34,29 @@ public interface ProductService {
      * 添加商品
      * @param param
      */
-    void save(ProductInfoDTO param);
+    void save(ProductInfoParam param);
 
     /**
      * 更新商品
      * @param param
      */
-    void update(ProductInfoDTO param);
+    void update(ProductInfoParam param);
 
     /**
      * 删除商品
      * @param productId
      */
     void delete(String productId);
+
+    /**
+     * 减少库存
+     * @param cartDTOList
+     */
+    void decreaseStock(List<CartDTO> cartDTOList);
+
+    /**
+     * 添加库存
+     * @param cartDTOList
+     */
+    void increaseStock(List<CartDTO> cartDTOList);
 }

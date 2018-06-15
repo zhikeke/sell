@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class ProductVo {
 
-    @JsonProperty("name")  //TODO: JSON 格式问题
+    @JsonProperty("name")
     private String categoryName;
 
     @JsonProperty("type")

@@ -1,4 +1,4 @@
-package com.ke.sell.dto;
+package com.ke.sell.param;
 
 import com.ke.sell.enums.ProductStatusEnum;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class ProductInfoDTO {
+public class ProductInfoParam {
     private Integer id;
 
     /** 商品Id. */

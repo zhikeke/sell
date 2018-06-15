@@ -83,4 +83,10 @@
       </if>
     </trim>
   </insert>
+
+  <select id="selectByOrderId" parameterType="map" resultMap="BaseResultMap">
+    select * from order_detail
+    where order_id = #{orderId}
+  </select>
+
 </mapper>
